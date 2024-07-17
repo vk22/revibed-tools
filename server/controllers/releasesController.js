@@ -13,9 +13,6 @@ class ReleaseController {
   }
 
   async getAll(req, res) {
-    // if (!checkHeaders(req)) {
-    //   res.status(403).send({ success: false, msg: 'Unauthorized' });
-    // }
     try {
       const releases = await ReleaseService.getAll();
       return res.json(releases);
@@ -39,18 +36,15 @@ class ReleaseController {
 
     try {
       const releases = await ReleaseService.export(req.body);
-
       const csv = new ObjectsToCsv(releases);
       await csv.toDisk('./export/export-releases.csv');
       res.download(exportFolder + 'export-releases.csv')
-
       return res.json(data);
     } catch (e) {
       res.status(500).json(e.message)
     }
   }
   async delete(req, res) {
-
     try {
       const data = await ReleaseService.delete(req.params.id);
       return res.json(data)
@@ -59,7 +53,6 @@ class ReleaseController {
     }
   }
   async addToRevibedMany(req, res) {
-
     try {
       const data = await ReleaseService.addToRevibedMany();
       return res.json(data);
@@ -68,7 +61,6 @@ class ReleaseController {
     }
   }
   async putOnSale(req, res) {
-
     try {
       const data = await ReleaseService.putOnSale(req.body);
       return res.json(data);
@@ -77,7 +69,6 @@ class ReleaseController {
     }
   }
   async checkRelease(req, res) {
-
     try {
       const data = await ReleaseService.checkRelease(req.body.releaseID);
       return res.json(data);
@@ -86,17 +77,7 @@ class ReleaseController {
       res.status(500).json(e.message)
     }
   }
-
-
   
-  
-}
-
-function checkHeaders(req) {
-  if (req.headers['x-api-key'] != 'l74b9ba9qmext9a6ulniigq8') {
-    return false
-  }
-  return true
 }
 
 module.exports = new ReleaseController();

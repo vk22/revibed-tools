@@ -6,12 +6,12 @@ const distributorsService = require("./distributorService");
 const discogsService = require("./discogsService");
 const revibedService = require("./revibedService");
 const userService = require("./userService");
-const releaseExtService = require("./releaseExtService");
 const fs = require('fs-extra');
 const { parse } = require("csv-parse");
 const EventEmitter = require("events");
 const emitter = new EventEmitter();
 const axios = require('axios');
+const ApiError = require('../exceptions/api-error');
 
 class ReleaseService {
 
@@ -83,6 +83,7 @@ class ReleaseService {
 
     } catch (error) {
       console.log('catch error ', error)
+      //throw ApiError.BadRequest(`Something wrong`)
       return { success: false, error };
     }
   }

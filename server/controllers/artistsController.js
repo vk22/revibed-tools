@@ -1,6 +1,6 @@
 const ArtistService = require("../services/artistService");
 
-class ReleaseController {
+class ArtistController {
 
   async create(req, res) {
 
@@ -13,9 +13,6 @@ class ReleaseController {
   }
 
   async getAll(req, res) {
-    // if (!checkHeaders(req)) {
-    //   res.status(403).send({ success: false, msg: 'Unauthorized' });
-    // }
     try {
       const artists = await ArtistService.getAll();
       return res.json(artists);
@@ -62,4 +59,4 @@ function checkHeaders(req) {
   return true
 }
 
-module.exports = new ReleaseController();
+module.exports = new ArtistController();

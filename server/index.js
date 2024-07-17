@@ -11,7 +11,8 @@ const expressSession = require("express-session");
 const config = require("./config/config");
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-const authMiddleware = require("./middleware/auth-middleware.js")
+const authMiddleware = require("./middleware/auth-middleware")
+const errorMiddleware = require('./middlewares/error-middleware');
 const cronService = require("./services/cronService");
 
 // App
@@ -43,6 +44,8 @@ app.use(
     secret: process.env.SESSION_SEC || "gjs83Ghf82",
   })
 );
+
+app.use(errorMiddleware);
 
 // Connect to Mongoose
 mongoose.connect(config.dbURL);
