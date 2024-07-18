@@ -10,4 +10,4 @@ node_modules/
 dump/
 
 # dotenv environment variable files
-#**/.env
+**/.env
