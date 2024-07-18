@@ -125,6 +125,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from) => {
+  // console.log('beforeEach ', store.state.auth.status)
   let isAuthenticated = store.state.auth.status.loggedIn
   console.log('isAuthenticated ', isAuthenticated, to)
   if (!isAuthenticated && to.name !== 'Login') {

@@ -3,6 +3,7 @@ import router from '@/router'
 
 const user = JSON.parse(localStorage.getItem('user'));
 const token = JSON.parse(localStorage.getItem('token'));
+// console.log('user ', user)
 const initialState = user
   ? { status: { loggedIn: true }, user: user, token: token}
   : { status: { loggedIn: false }, user: null };
@@ -53,12 +54,13 @@ export const auth = {
         },
         error => {
           commit('registerFailure');
+          console.log('aaaaaaaaaa')
           return Promise.reject(error);
         }
       );
     },
     getusers({ commit, state }, token) {
-      console.log('getusers store ')
+      // console.log('getusers store ')
       return AuthService.getusers(state.token).then(
         response => {
           console.log('response.data ', response.data)
@@ -76,7 +78,7 @@ export const auth = {
       );
     },
     getAdminLogs({ commit, state }, token) {
-      console.log('getusers store ')
+      // console.log('getusers store ')
       return AuthService.getAdminLogs(state.token).then(
         response => {
           console.log('response.data ', response.data)
@@ -104,18 +106,24 @@ export const auth = {
     loginFailure(state) {
       state.status.loggedIn = false;
       state.user = null;
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
     },
     logout(state) {
       state.status.loggedIn = false;
       state.user = null;
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
       document.location.reload();
-      
     },
     registerSuccess(state) {
       state.status.loggedIn = false;
     },
     registerFailure(state) {
       state.status.loggedIn = false;
+      state.user = null;
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
     }
   },
   getters: {

@@ -11,7 +11,7 @@ const expressSession = require("express-session");
 const config = require("./config/config");
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-const authMiddleware = require("./middleware/auth-middleware")
+const authMiddleware = require("./middlewares/auth-middleware")
 const errorMiddleware = require('./middlewares/error-middleware');
 const cronService = require("./services/cronService");
 

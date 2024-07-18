@@ -152,16 +152,16 @@ export const main = {
         async getAllData ({ state, dispatch, commit, rootState }) {
             console.time("getAllData");
 
-            console.log('import.meta.env ', import.meta.env.VITE_API_URL) 
+            // console.log('import.meta.env ', import.meta.env.VITE_API_URL) 
 
-            console.log('rootState ', rootState.auth.user)
+            // console.log('rootState ', rootState.auth.user)
 
             //// check user
-            // const checkIfUserCan = await dispatch('auth/getuser', {}, {root:true})
-            const checkIfUserCan = rootState.auth.user
-            console.log('checkIfUserCan ', checkIfUserCan)
-            if (!checkIfUserCan) return;
-            // console.log('exp ', new Date (checkIfUserCan.user.exp * 1000))
+            const checkIfUserCan = await dispatch('auth/getuser', {}, {root:true})
+            ///const checkIfUserCan = rootState.auth.user
+            // console.log('checkIfUserCan ', checkIfUserCan)
+            if (!checkIfUserCan.success) return;
+            console.log('exp ', new Date (checkIfUserCan.user.exp * 1000))
 
 
             /// route
