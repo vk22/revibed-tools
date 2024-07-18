@@ -1,10 +1,10 @@
 ## Project setup
 This app contains both the backend and the frontend in a single repository.
 ```	
-├── Readme.md
+├── client
 ├── server
-├── docker-compose.yml
-└── client
+├── mongo
+└── docker-compose.yml
 ```
 
 ### Clone Repository
@@ -21,9 +21,10 @@ $ cd revibed-tools
 ```
 ### Start app containers
 
-Start the `client`, `server` and `db` containers using docker-compose
+Start the `client`, `server`, `db` and `mongo-seed` containers using docker-compose
 
 ```	bash
+$ docker-compose build
 $ docker-compose up -d 
 ```
 Access the app from your browser at http://localhost:9000
