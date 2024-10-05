@@ -78,6 +78,9 @@ const NewSchema = new Schema({
   source: {
     type: String
   },
+  sourceCondition: {
+    type: String
+  },
   quality: {
     type: String
   },

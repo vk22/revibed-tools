@@ -614,6 +614,14 @@ class ReleaseService {
 
         }
 
+        if (releaseNew.sourceCondition) {
+          releaseFromDB.sourceCondition = releaseNew.sourceCondition
+        }
+
+        if (releaseNew.quality) {
+          releaseFromDB.quality = releaseNew.quality
+        }
+
         //// statusMain
         let statusMainOld = releaseFromDB.statusMain
         releaseFromDB.statusMain = await this.releaseSaleStatusHandler(releaseFromDB)

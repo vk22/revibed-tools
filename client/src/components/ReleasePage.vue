@@ -134,6 +134,18 @@
                           />
                       </div>
                     </div>
+                    <div class="release-page__details" v-if="release.sourceCondition">
+                      <div>Source Condition:</div> 
+                      <div>
+                        {{ release.sourceCondition }}
+                      </div>
+                    </div>
+                    <div class="release-page__details" v-if="release.quality">
+                      <div>Rip Quality:</div> 
+                      <div>
+                        {{ release.quality }}
+                      </div>
+                    </div>
                     <div class="release-page__details">
                       <div>Type:</div> 
                       <div>
