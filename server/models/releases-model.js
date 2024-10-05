@@ -78,6 +78,9 @@ const NewSchema = new Schema({
   source: {
     type: String
   },
+  quality: {
+    type: String
+  },
   onRevibed: {
     forSale: { type: Boolean },
     id: { type: String }

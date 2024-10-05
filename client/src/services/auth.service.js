@@ -6,7 +6,7 @@ import axios from 'axios';
 class AuthService {
   login(user) {
     return axios
-      .post(import.meta.env.VITE_API_URL + '/auth/login', {
+      .post(import.meta.env.VITE_API_URL + 'api/auth/login', {
         username: user.username,
         password: user.password,
       })
@@ -33,21 +33,21 @@ class AuthService {
   }
 
   getuser(token) {
-    return axios.get(import.meta.env.VITE_API_URL + '/auth/user', {
+    return axios.get(import.meta.env.VITE_API_URL + 'api/auth/user', {
       params: {
         token: token
       }
     });
   }
   getusers(token) {
-    return axios.get(import.meta.env.VITE_API_URL + '/auth/users', {
+    return axios.get(import.meta.env.VITE_API_URL + 'api/auth/users', {
       params: {
         token: token
       }
     });
   }
   getAdminLogs(token) {
-    return axios.get(import.meta.env.VITE_API_URL + '/get-logs', {
+    return axios.get(import.meta.env.VITE_API_URL + 'api/get-logs', {
       params: {
         token: token
       }
