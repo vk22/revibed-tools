@@ -21,7 +21,7 @@ class ReleaseController {
     }
   }
   async update(req, res) {
-
+    console.log('release update req.body ', req.body)
     try {
       const id = req.params.id
       const release = req.body.release
