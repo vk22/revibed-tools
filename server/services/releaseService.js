@@ -96,6 +96,8 @@ class ReleaseService {
       releaseID: release.releaseID,
       type: release.type ? release.type : 'goods',
       source: release.source ? release.source : '',
+      sourceCondition: release.sourceCondition ? release.sourceCondition : '',
+      quality: release.quality ? release.quality : '',
       title: releaseData.title ? releaseData.title : '',
       artist: releaseData.artists_sort ? releaseData.artists_sort : '',
       labelID: releaseData.labels !== undefined ? releaseData.labels[0].id : '',
