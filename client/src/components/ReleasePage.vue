@@ -240,7 +240,7 @@
               </div>
               <div class="mb-3">
                 <div variant="outlined" class="btn sm-btn no-full-w" style="font-size: 16px; line-height: 19px;"
-                  @click="addTextField('authors')">
+                  @click="addTextField('composers')">
                   +
                 </div>
               </div>
