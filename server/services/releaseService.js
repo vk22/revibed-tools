@@ -547,9 +547,9 @@ class ReleaseService {
   async updateByRevibedID(releases) {
     for (let releaseNew of releases) {
       const id = releaseNew.id
-      const releaseFromDB = await Releases.find({"onRevibed.id": id});
+      const releaseFromDB = await Releases.findOne({"onRevibed.id": id});
       if (releaseFromDB) {
-        console.log('releaseFromDB ', releaseFromDB.onRevibed)
+        console.log('releaseFromDB ', releaseFromDB)
         releaseFromDB.authors = releaseNew.authors
         releaseFromDB.composers = releaseNew.composers
         await releaseFromDB.save()

@@ -33,7 +33,7 @@ class ReleaseController {
     }
   }
   async updateByRevibedID(req, res) {
-    // console.log('release update req.body ', req.body)
+    console.log('updateByRevibedID req.body ', req.body)
     try {
       const releases = req.body
       const data = await ReleaseService.updateByRevibedID(releases);
