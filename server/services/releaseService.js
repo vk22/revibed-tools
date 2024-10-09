@@ -147,7 +147,6 @@ class ReleaseService {
     }
   }
 
-
   async getLabelsChainFromDiscogs(id, labels) {
     try {
       const data = await discogsService.getLabelData(id);
@@ -541,6 +540,20 @@ class ReleaseService {
         let saveItem = await releaseFromDB.save()
         console.log('saveItem ', saveItem)
       }
+    }
+  }
+
+  //updateByRevibedID
+  async updateByRevibedID(releases) {
+    for (let releaseNew of releases) {
+      const id = releaseNew.id
+      const releaseFromDB = await Releases.find({"onRevibed.id": id});
+      if (releaseFromDB) {
+        console.log('releaseFromDB ', releaseFromDB.onRevibed)
+        releaseFromDB.authors = releaseNew.authors
+        releaseFromDB.composers = releaseNew.composers
+        await releaseFromDB.save()
+      } 
     }
   }
 

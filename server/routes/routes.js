@@ -19,6 +19,7 @@ router.post('/export-releases/', releasesController.export)
 router.post('/add-to-rvbd-many/', releasesController.addToRevibedMany)
 router.post('/put-on-sale-release/', releasesController.putOnSale)
 router.post('/check-release/', releasesController.checkRelease)
+router.post('/update-by-revibed-id/', releasesController.updateByRevibedID)
 
 
 

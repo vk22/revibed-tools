@@ -32,6 +32,16 @@ class ReleaseController {
       res.status(500).json(e.message)
     }
   }
+  async updateByRevibedID(req, res) {
+    // console.log('release update req.body ', req.body)
+    try {
+      const releases = req.body
+      const data = await ReleaseService.updateByRevibedID(releases);
+      return res.json(data);
+    } catch (e) {
+      res.status(500).json(e.message)
+    }
+  }
   async export(req, res) {
 
     try {

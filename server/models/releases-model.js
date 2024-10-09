@@ -72,6 +72,14 @@ const NewSchema = new Schema({
   notes: [{
     type: String,
   }],
+  authors: {
+    type: Array,
+    default: []
+  },
+  composers: {
+    type: Array,
+    default: []
+  },
   updated: {
     type: Date
   },

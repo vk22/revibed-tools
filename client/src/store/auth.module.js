@@ -53,8 +53,8 @@ export const auth = {
           return Promise.resolve(response.data);
         },
         error => {
-          commit('registerFailure');
-          console.log('aaaaaaaaaa')
+          console.log('loginFailure')
+          commit('loginFailure');
           return Promise.reject(error);
         }
       );
@@ -108,6 +108,7 @@ export const auth = {
       state.user = null;
       localStorage.removeItem('user')
       localStorage.removeItem('token')
+      document.location.reload();
     },
     logout(state) {
       state.status.loggedIn = false;
@@ -124,6 +125,7 @@ export const auth = {
       state.user = null;
       localStorage.removeItem('user')
       localStorage.removeItem('token')
+      document.location.reload();
     }
   },
   getters: {
