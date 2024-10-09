@@ -607,6 +607,12 @@ class ReleaseService {
         if (releaseNew.statusArtist) {
           releaseFromDB.statusArtist = releaseNew.statusArtist
         }
+        if (releaseNew.authors) {
+          releaseFromDB.authors = releaseNew.authors
+        }
+        if (releaseNew.composers) {
+          releaseFromDB.composers = releaseNew.composers
+        }
 
         /// если изменили родной лейбл
         if (releaseFromDB.labelID !== releaseNew.labelID) {

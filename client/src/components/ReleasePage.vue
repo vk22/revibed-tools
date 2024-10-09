@@ -230,6 +230,25 @@
           <v-col cols="12">
             <div class="release-page__section">
               <div class="mb-3">
+                <h3>Composers</h3>
+              </div>
+              <div class="mb-3" v-if="release.composers.length">
+                <div class="form-group mr-3" v-for="(note, index) in release.composers" :key="index">
+                  <input type="text" name="contacts" v-model="release.composers[index]"> 
+                  <!-- <v-textarea variant="outlined" v-model="release.notes[index]">{{ release.notes[index] }}</v-textarea> -->
+                </div>
+              </div>
+              <div class="mb-3">
+                <div variant="outlined" class="btn sm-btn no-full-w" style="font-size: 16px; line-height: 19px;"
+                  @click="addTextField('authors')">
+                  +
+                </div>
+              </div>
+            </div>
+          </v-col>
+          <v-col cols="12">
+            <div class="release-page__section">
+              <div class="mb-3">
                 <h3>Youtube</h3>
               </div>
               <div>
@@ -433,6 +452,12 @@ export default {
       this.release.notes = this.release.notes.filter(element => {
         return element !== ''
       });
+      this.release.authors = this.release.authors.filter(element => {
+        return element !== ''
+      });
+      this.release.composers = this.release.composers.filter(element => {
+        return element !== ''
+      });
       await this.$store.dispatch('editRelease', { release: this.release })
       setTimeout(() => {
         this.notLoading = true
@@ -569,7 +594,7 @@ export default {
     }
 
     &>div:first-child {
-      width: 100px;
+      width: 145px;
     }
   }
 
