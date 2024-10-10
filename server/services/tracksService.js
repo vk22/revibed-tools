@@ -1,4 +1,5 @@
 const Tracks = require("../models/tracks-model");
+const Releases = require("../models/releases-model");
 // const releaseService = require("./releaseService");
 // const discogsService = require("./discogsService");
 
@@ -47,7 +48,7 @@ class Trackservice {
     }
   }
 
-  /// Add Youtube
+  /// Add track
   async create(data) {
     const { releaseID, position, title, authors, composers } = data
     try {
@@ -74,9 +75,10 @@ class Trackservice {
 
   }
 
-  /// Edit Youtube 
+  /// Edit track 
   async update(id, track) {
-    console.log('edit Track ', id)
+    console.log('edit Track id', id)
+    console.log('edit Track track ', track)
     try {
       const trackDB = await Tracks.findById(id);
 
@@ -84,16 +86,16 @@ class Trackservice {
         return { success: false, message: `Ничего не найдено` }
       } else {
         if (trackDB.position) {
-          trackDB.position = youtube.position
+          trackDB.position = track.position
         }
         if (trackDB.title) {
-          trackDB.title = youtube.title
+          trackDB.title = track.title
         }
         if (trackDB.authors) {
-          trackDB.authors = youtube.authors
+          trackDB.authors = track.authors
         }
         if (trackDB.composers) {
-          trackDB.composers = youtube.composers
+          trackDB.composers = track.composers
         }
 
         const saveItem = await trackDB.save()
@@ -115,6 +117,29 @@ class Trackservice {
     } catch (e) {
       console.log(e)
       return { success: false, message: `Access Error` }
+    }
+  }
+
+  async updateByReleaseID(tracks) {
+    for (let trackNew of tracks) {
+      console.log('trackNew ', trackNew)
+      const rvbdID = trackNew.id
+      const title = trackNew.title
+      const releaseFromDB = await Releases.findOne({"onRevibed.id": rvbdID});
+      if (releaseFromDB) {
+        const releaseID = releaseFromDB.releaseID
+        if (releaseID) {
+          const trackFromDB = await Tracks.findOne({releaseID: releaseID, title: title});
+          if (trackFromDB) {
+            console.log('trackFromDB ', trackFromDB)
+            trackFromDB.authors = trackNew.authors
+            trackFromDB.composers = trackNew.composers
+            await trackFromDB.save()
+          } 
+        }
+
+      }
+
     }
   }
 

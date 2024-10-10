@@ -30,22 +30,22 @@ class TracksController {
     }
   }
   async update(req, res) {
-    console.log('release update req.body ', req.body)
+    console.log('track update req.body ', req.body)
     try {
       const id = req.params.id
-      const data = req.body.data
+      const track = req.body.track
       const user = req.body.user
-      const response = await TracksService.update(id, data, user);
+      const response = await TracksService.update(id, track, user);
       return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
   }
-  async updateByRevibedID(req, res) {
-    console.log('updateByRevibedID req.body ', req.body)
+  async updateByReleaseID(req, res) {
+    //console.log('updateByReleaseID req.body ', req.body)
     try {
       const releases = req.body
-      const response = await TracksService.updateByRevibedID(releases);
+      const response = await TracksService.updateByReleaseID(releases);
       return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)

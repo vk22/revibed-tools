@@ -26,7 +26,7 @@ const accessLogStream = fs.createWriteStream(
 app.use(helmet());
 app.use(cookieParser());
 app.use(morgan("combined", { stream: accessLogStream }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors());
 
 //app.use(checkHeaders)

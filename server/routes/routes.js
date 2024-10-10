@@ -28,6 +28,7 @@ router.get('/get-release-tracks/:id', tracksController.getByRelease)
 router.put('/edit-track/:id', tracksController.update)
 router.post('/add-track/', tracksController.create)
 router.delete('/delete-track/:id', tracksController.delete)
+router.post('/update-by-release-id/', tracksController.updateByReleaseID)
 
 
 /// Labels

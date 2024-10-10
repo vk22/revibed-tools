@@ -9,7 +9,7 @@
                 <div class="mb-3">
                   <h3>Authors</h3>
                 </div>
-                <div class="mb-3" v-if="selectedTrack.authors.length">
+                <div class="mb-3">
                   <div class="form-group mr-3" v-for="(note, index) in selectedTrack.authors" :key="index">
                     <input type="text" name="contacts" v-model="selectedTrack.authors[index]">
                     <!-- <v-textarea variant="outlined" v-model="release.notes[index]">{{ release.notes[index] }}</v-textarea> -->
@@ -28,7 +28,7 @@
                 <div class="mb-3">
                   <h3>Composers</h3>
                 </div>
-                <div class="mb-3" v-if="selectedTrack.composers.length">
+                <div class="mb-3">
                   <div class="form-group mr-3" v-for="(note, index) in selectedTrack.composers" :key="index">
                     <input type="text" name="contacts" v-model="selectedTrack.composers[index]">
                     <!-- <v-textarea variant="outlined" v-model="release.notes[index]">{{ release.notes[index] }}</v-textarea> -->
@@ -263,23 +263,42 @@
               <h3>Tracklist</h3>
             </div>
             <div v-if="tracks">
+              <div class="track-item">
+                  <div class="position mr-3">
+                    <b></b>
+                  </div>
+                  <div class="title mr-3">
+                    <b>title</b>
+                  </div>
+                  <div class="authors mr-3">
+                    <b>authors</b>
+                  </div>
+                  <div class="composers mr-3">
+                    <b>composers</b>
+                  </div>
+                  <div class="open-panel">
+                  </div>
+              </div>
               <div class="track-item" v-for="(track, _id) in tracks" :key="_id">
-                <div class="left-side">
-                  <div class="position">
+                  <div class="position mr-3">
                     {{ track.position }}
                   </div>
-                  <div cols="title">
+                  <div class="title mr-3">
                     {{ track.title }}
                   </div>
-                </div>
-                <div class="right-side">
+                  <div class="authors mr-3">
+                   <div v-if="track.authors.length">{{ track.authors.join(', ') }}</div> 
+                  </div>
+                  <div class="composers mr-3">
+                    <div v-if="track.composers.length">{{ track.composers.join(', ') }}</div>
+                  </div>
+
                   <div class="open-panel">
                     <div variant="outlined" class="btn sm2-btn no-full-w" style="font-size: 14px; line-height: 12px;"
                       @click="openTrackEditPanel(track)">
                       +
                     </div>
                   </div>
-                </div>
               </div>
             </div>
             <div v-else>
@@ -466,8 +485,23 @@ export default {
       this.selectedTrack = track;
       this.panelTrackIsOpen = true;
     },
-    editTrack() {
+    async editTrack() {
       console.log('selectedTrack ', this.selectedTrack)
+      this.selectedTrack.authors = this.selectedTrack.authors.filter(element => {
+        return element !== ''
+      });
+      this.selectedTrack.composers = this.selectedTrack.composers.filter(element => {
+        return element !== ''
+      });
+      const response = await this.$store.dispatch('editTrack', { track: this.selectedTrack })
+      console.log('response ', response)
+      if (response.success) {
+        this.panelTrackIsOpen = false;
+        //this.selectedTrack = undefined;
+        
+      } else {
+        alert ('Something wrong')
+      }
     },
     addCopyrightOwner() {
       this.release.youtubeCopyrightOwners.push({ distributor: [''], label: [''] });
@@ -488,11 +522,11 @@ export default {
       }
     },
     addTextField(field) {
-      if (this.release[field]) {
-        this.release[field].push('')
+      if (this.selectedTrack[field]) {
+        this.selectedTrack[field].push('')
       } else {
-        this.release[field] = []
-        this.release[field].push('')
+        this.selectedTrack[field] = []
+        this.selectedTrack[field].push('')
       }
     },
     newLabelSelected(value) {
@@ -709,7 +743,7 @@ export default {
   .tracklist {
     .track-item {
       display: flex;
-      justify-content: space-between;
+      // justify-content: space-between;
       padding: .5rem 0;
       border-bottom: 1px solid #ddd;
 
@@ -719,7 +753,19 @@ export default {
       }
 
       .position {
-        padding-right: 1rem;
+        flex-basis: 50px;
+      }
+      .title {
+        flex-basis: 300px;
+      }
+      .authors {
+        flex-basis: 200px;
+      }
+      .composers {
+        flex-basis: 200px;
+      }
+      .open-panel {
+        flex-basis: 24px;
       }
     }
   }

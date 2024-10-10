@@ -465,9 +465,27 @@ export const main = {
                         'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
                     }
                 })
-                console.log('response after edit: ', data)
+                //console.log('response after edit: ', data)
+                return data
             }
             await dispatch('getAllData')
+        },
+        async editTrack({ state, dispatch, rootState }, trackData) {
+            console.log('trackData ', trackData)
+            let user = rootState.auth.user
+            let track = trackData.track
+
+            console.log('editTrack ', track)
+            if (track) {
+                const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-track/${track._id}`, {track: track, user: user}, {
+                    headers: {
+                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                    }
+                })
+                //console.log('response after edit: ', data)
+                return data
+            }
+            //await dispatch('getAllData')
         },
         async putOnSale({ state, dispatch, rootState }, releaseData) {
             console.log('releaseData ', releaseData)
