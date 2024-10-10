@@ -15,6 +15,7 @@ export const main = {
         allReleasesAndNotGoods: [],
         allReleases: [],
         releases: [],
+        tracks: [],
         notGoods: [],
         sortedLabels: [],
         youtubes: [],
@@ -116,6 +117,17 @@ export const main = {
             });
             return response
         },
+        async getTracks({ rootState }) {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-tracks`, {
+                headers: {
+                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                },
+                params: {
+                    token: rootState.auth.token
+                }
+            });
+            return response
+        },
         async getDistributors({ rootState }) {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-distributors`, {
                 headers: {
@@ -179,7 +191,6 @@ export const main = {
             if (route === 'Home' || route === 'ReleasePage') {
 
                 const getReleasesData = await dispatch('getReleases')
-                //console.log("getReleases response ", getReleasesData.data);
                 if (getReleasesData.data.success) {
                     commit('setReleases2', getReleasesData.data)
                 }
@@ -188,7 +199,6 @@ export const main = {
                 state.allDataReady = true
 
                 const getLabelsData = await dispatch('getLabels')
-                //console.log("getLabelsData response ", getLabelsData.data);
                 if (getLabelsData.data.success) {
                     commit('setLabels', getLabelsData.data)
                 }
@@ -196,7 +206,6 @@ export const main = {
             } else {
 
                 const getLabelsData = await dispatch('getLabels')
-                //console.log("getLabelsData response ", getLabelsData.data);
                 if (getLabelsData.data.success) {
                     commit('setLabels', getLabelsData.data)
                 }
@@ -211,36 +220,41 @@ export const main = {
                 }
             }
 
-
             //// All the rest in Parallel
             const [
+                    getTracksData,    
                     getYoutubesData, 
                     getArtistsData, 
                     getDistributorsData, 
                     getOwnersData, 
                     getCountriesData
                 ] = await Promise.all([
+                    dispatch('getTracks'),
                     dispatch('getYoutubes'), 
                     dispatch('getArtists'), 
                     dispatch('getDistributors'),
                     dispatch('getOwners'),
                     dispatch('getCountries')
                 ]);
-            if (getYoutubesData.data.success) {
-                commit('setYoutubes', getYoutubesData.data)
-            }
-            if (getArtistsData.data.success) {
-                commit('setArtists', getArtistsData.data)
-            }
-            if (getDistributorsData.data.success) {
-                commit('setDistributors', getDistributorsData.data)
-            }
-            if (getOwnersData.data.success) {
-                commit('setOwners', getOwnersData.data)
-            }
-            if (getCountriesData.data.success) {
-                commit('setCountries', getCountriesData.data)
-            }
+            
+                if (getTracksData.data.success) {
+                    commit('setTracks', getTracksData.data)
+                }
+                if (getYoutubesData.data.success) {
+                    commit('setYoutubes', getYoutubesData.data)
+                }
+                if (getArtistsData.data.success) {
+                    commit('setArtists', getArtistsData.data)
+                }
+                if (getDistributorsData.data.success) {
+                    commit('setDistributors', getDistributorsData.data)
+                }
+                if (getOwnersData.data.success) {
+                    commit('setOwners', getOwnersData.data)
+                }
+                if (getCountriesData.data.success) {
+                    commit('setCountries', getCountriesData.data)
+                }
 
 
 
@@ -569,6 +583,9 @@ export const main = {
     mutations: {
         setRevibedGoods(state, data) {
             console.log('setRevibedGoods ', data)
+        },
+        setTracks(state, data) { 
+            state.tracks = data.tracks
         },
         setCountries(state, data) { 
             state.countries = data.countries
@@ -942,6 +959,11 @@ export const main = {
             if (state.allReleasesAndNotGoods.length) {
                 //console.log('getRelease ', state.releases.find(item => item._id === id))
                 return state.allReleasesAndNotGoods.find(item => item._id === id)
+            }
+        },
+        getReleaseTracks: state => (id) => {
+            if (state.tracks.length) {
+                return state.tracks.filter(item => item.releaseID === id).reverse()
             }
         },
         getYoutube: state => (id) => {

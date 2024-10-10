@@ -1,5 +1,56 @@
 <template>
   <div class="fixed-container">
+    <v-dialog v-model="panelTrackIsOpen" persistent max-width="600px">
+      <v-card class="set-authors-panel">
+        <v-container>
+          <v-row>
+            <v-col cols="6">
+              <div class="release-page__section">
+                <div class="mb-3">
+                  <h3>Authors</h3>
+                </div>
+                <div class="mb-3" v-if="selectedTrack.authors.length">
+                  <div class="form-group mr-3" v-for="(note, index) in selectedTrack.authors" :key="index">
+                    <input type="text" name="contacts" v-model="selectedTrack.authors[index]">
+                    <!-- <v-textarea variant="outlined" v-model="release.notes[index]">{{ release.notes[index] }}</v-textarea> -->
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div variant="outlined" class="btn sm-btn no-full-w" style="font-size: 16px; line-height: 19px;"
+                    @click="addTextField('authors')">
+                    +
+                  </div>
+                </div>
+              </div>
+            </v-col>
+            <v-col cols="6">
+              <div class="release-page__section">
+                <div class="mb-3">
+                  <h3>Composers</h3>
+                </div>
+                <div class="mb-3" v-if="selectedTrack.composers.length">
+                  <div class="form-group mr-3" v-for="(note, index) in selectedTrack.composers" :key="index">
+                    <input type="text" name="contacts" v-model="selectedTrack.composers[index]">
+                    <!-- <v-textarea variant="outlined" v-model="release.notes[index]">{{ release.notes[index] }}</v-textarea> -->
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div variant="outlined" class="btn sm-btn no-full-w" style="font-size: 16px; line-height: 19px;"
+                    @click="addTextField('composers')">
+                    +
+                  </div>
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-card-actions class="pr-4">
+          <v-spacer></v-spacer>
+          <div variant="outlined" class="btn sm-btn" @click="panelTrackIsOpen = false">Cancel</div>
+          <div variant="outlined" class="btn sm-btn ml-3" @click="editTrack()">Save</div>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="panelIsOpen2" persistent max-width="600px">
       <v-card class="edit-panel">
         <v-container>
@@ -20,7 +71,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
     <v-dialog v-model="panelIsOpen" persistent max-width="600px">
       <v-card class="add-playlist-panel">
         <v-card-title>
@@ -39,6 +89,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <v-responsive class="release-page align-top fill-height" v-if="release && notLoading">
       <!-- {{ release }} -->
       <v-row>
@@ -102,7 +153,7 @@
                     <div>Parent Label:</div>
                     <div v-if="release.labelParent">
                       <router-link :to="`/labels/${release.labelParent.id}`" class="table-item__labelName">{{
-                        release.labelParent.name}}</router-link>
+                        release.labelParent.name }}</router-link>
                     </div>
                     <div v-else class="text-grey">
                       No parent label
@@ -204,9 +255,37 @@
 
                 </v-col>
               </v-row>
-
-
             </div>
+          </v-col>
+          <v-col cols="12">
+            <div class="release-page__section tracklist">
+            <div class="mb-3">
+              <h3>Tracklist</h3>
+            </div>
+            <div v-if="tracks">
+              <div class="track-item" v-for="(track, _id) in tracks" :key="_id">
+                <div class="left-side">
+                  <div class="position">
+                    {{ track.position }}
+                  </div>
+                  <div cols="title">
+                    {{ track.title }}
+                  </div>
+                </div>
+                <div class="right-side">
+                  <div class="open-panel">
+                    <div variant="outlined" class="btn sm2-btn no-full-w" style="font-size: 14px; line-height: 12px;"
+                      @click="openTrackEditPanel(track)">
+                      +
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              <v-progress-circular :size="20" :width="2" indeterminate color="#111"></v-progress-circular>
+            </div>
+          </div>
           </v-col>
           <v-col cols="12">
             <div class="release-page__section">
@@ -215,7 +294,7 @@
               </div>
               <div class="mb-3" v-if="release.authors.length">
                 <div class="form-group mr-3" v-for="(note, index) in release.authors" :key="index">
-                  <input type="text" name="contacts" v-model="release.authors[index]"> 
+                  <input type="text" name="contacts" v-model="release.authors[index]">
                   <!-- <v-textarea variant="outlined" v-model="release.notes[index]">{{ release.notes[index] }}</v-textarea> -->
                 </div>
               </div>
@@ -234,7 +313,7 @@
               </div>
               <div class="mb-3" v-if="release.composers.length">
                 <div class="form-group mr-3" v-for="(note, index) in release.composers" :key="index">
-                  <input type="text" name="contacts" v-model="release.composers[index]"> 
+                  <input type="text" name="contacts" v-model="release.composers[index]">
                   <!-- <v-textarea variant="outlined" v-model="release.notes[index]">{{ release.notes[index] }}</v-textarea> -->
                 </div>
               </div>
@@ -375,12 +454,21 @@ export default {
       youtubeCopyrightOwnersToAdd: [],
       notLoading: true,
       panelIsOpen: false,
-      panelIsOpen2: false
+      panelIsOpen2: false,
+      panelTrackIsOpen: false,
+      selectedTrack: undefined
     };
   },
   async mounted() {
   },
   methods: {
+    openTrackEditPanel(track) {
+      this.selectedTrack = track;
+      this.panelTrackIsOpen = true;
+    },
+    editTrack() {
+      console.log('selectedTrack ', this.selectedTrack)
+    },
     addCopyrightOwner() {
       this.release.youtubeCopyrightOwners.push({ distributor: [''], label: [''] });
     },
@@ -485,6 +573,9 @@ export default {
     release() {
       return this.$store.getters.getRelease(this.$route.params.id);
     },
+    tracks() {
+      return this.$store.getters.getReleaseTracks(this.release.releaseID)
+    },
     allLabelsList() {
       return this.$store.getters.getAllLabelsList
     },
@@ -582,8 +673,6 @@ export default {
     // }
   }
 
-
-
   &__details {
     display: flex;
     align-items: center;
@@ -615,6 +704,24 @@ export default {
   .label-release {
     display: flex;
     justify-content: space-between;
+  }
+
+  .tracklist {
+    .track-item {
+      display: flex;
+      justify-content: space-between;
+      padding: .5rem 0;
+      border-bottom: 1px solid #ddd;
+
+      .left-side,
+      .right-side {
+        display: flex;
+      }
+
+      .position {
+        padding-right: 1rem;
+      }
+    }
   }
 }
 

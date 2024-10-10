@@ -6,12 +6,14 @@ const distributorsService = require("./distributorService");
 const discogsService = require("./discogsService");
 const revibedService = require("./revibedService");
 const userService = require("./userService");
+const tracksService = require("./tracksService");
 const fs = require('fs-extra');
 const { parse } = require("csv-parse");
 const EventEmitter = require("events");
 const emitter = new EventEmitter();
 const axios = require('axios');
 const ApiError = require('../exceptions/api-error');
+const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 class ReleaseService {
 
@@ -118,7 +120,8 @@ class ReleaseService {
       year: releaseData.year ? releaseData.year : 0,
       country: releaseData.country ? releaseData.country : '',
       genres: releaseData.genres ? releaseData.genres : [],
-      styles: releaseData.styles ? releaseData.styles : []
+      styles: releaseData.styles ? releaseData.styles : [],
+      tracklist: releaseData.tracklist ? releaseData.tracklist : []
       
     }
   }
@@ -430,7 +433,7 @@ class ReleaseService {
       // const releasesExtended = await this.releasesHandle(releases)
       // const notGoods = await Releases.find({type: {$ne: 'goods'}}).sort({ _id: -1 });
 
-      const releases = await Releases.find({"type": { "$in": ["goods", "coming_soon"]}}).sort({ _id: -1 });
+      const releases = await Releases.find({"type": { "$in": ["goods", "coming_soon"]}}).sort({ _id: 1 });
       if (!releases) {
         return { message: `Ничего не найдено` }
       }
@@ -506,6 +509,31 @@ class ReleaseService {
       if (!release.comment) {
         release.comment = ''
       }
+
+      // const getTracks = await tracksService.get(release.releaseID)
+  
+      // if (!getTracks.tracks.length) {
+
+      //   const releaseData = await discogsService.getReleaseData(release.releaseID)
+
+      //   if (releaseData) {
+      //     const tracklist = releaseData.tracklist
+      //     for (let i = 0; i < tracklist.length; ++i) {
+      //       let track = tracklist[i]
+      //       track.releaseID = release.releaseID
+      //       const createRes = await tracksService.create(track)
+      //       console.log('createRes ', createRes)
+  
+      //     }
+      //   }
+      //   await sleep(1000);
+
+      // } else {
+      //   console.log('Эти треки есть !')
+      // }
+
+
+
     }
     //console.timeEnd("releasesHandle");
 

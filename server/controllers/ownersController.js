@@ -25,8 +25,8 @@ class OwnerController {
       const id = req.params.id
       const label = req.body.label
       const user = req.body.user
-      const data = await ownerService.update(id, label, user);
-      return res.json(data);
+      const response = await ownerService.update(id, label, user);
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }

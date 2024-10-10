@@ -8,6 +8,7 @@ const distributorsController = require("../controllers/distributorsController");
 const ownersController = require("../controllers/ownersController");
 const countriesController = require("../controllers/countriesController");
 const logsController = require("../controllers/logsController");
+const tracksController = require("../controllers/tracksController");
 
 
 /// Releases
@@ -21,7 +22,12 @@ router.post('/put-on-sale-release/', releasesController.putOnSale)
 router.post('/check-release/', releasesController.checkRelease)
 router.post('/update-by-revibed-id/', releasesController.updateByRevibedID)
 
-
+/// Tracks
+router.get('/get-tracks/', tracksController.getAll)
+router.get('/get-release-tracks/:id', tracksController.getByRelease)
+router.put('/edit-track/:id', tracksController.update)
+router.post('/add-track/', tracksController.create)
+router.delete('/delete-track/:id', tracksController.delete)
 
 
 /// Labels
@@ -32,8 +38,6 @@ router.post('/export-labels/', labelsController.export)
 router.put('/remove-parentlabel/:id', labelsController.removeParentLabel)
 router.post('/sublabels-exist-update/', labelsController.sublabelsExistUpdate)
 router.post('/sublabels-status-update/', labelsController.sublabelsStatusUpdate)
-
-
 
 /// Artists
 router.post('/add-artist/', artistsController.create)

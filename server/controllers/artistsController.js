@@ -26,8 +26,8 @@ class ArtistController {
       const id = req.params.id
       const artist = req.body.artist
       const user = req.body.user
-      const data = await ArtistService.update(id, artist, user);
-      return res.json(data);
+      const response = await ArtistService.update(id, artist, user);
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
@@ -35,8 +35,8 @@ class ArtistController {
   async delete(req, res) {
 
     try {
-      const data = await ArtistService.delete(req.params.id);
-      return res.json(data)
+      const response = await ArtistService.delete(req.params.id);
+      return res.json(response)
     } catch (e) {
       res.status(500).json(e)
     }
@@ -44,8 +44,8 @@ class ArtistController {
   async removeParentLabel(req, res) {
 
     try {
-      const data = await ArtistService.removeParentLabel(req);
-      return res.json(data);
+      const response = await ArtistService.removeParentLabel(req);
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }

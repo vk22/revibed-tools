@@ -26,8 +26,8 @@ class ReleaseController {
       const id = req.params.id
       const release = req.body.release
       const user = req.body.user
-      const data = await ReleaseService.update(id, release, user);
-      return res.json(data);
+      const response = await ReleaseService.update(id, release, user);
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
@@ -36,8 +36,8 @@ class ReleaseController {
     console.log('updateByRevibedID req.body ', req.body)
     try {
       const releases = req.body
-      const data = await ReleaseService.updateByRevibedID(releases);
-      return res.json(data);
+      const response = await ReleaseService.updateByRevibedID(releases);
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
@@ -49,39 +49,39 @@ class ReleaseController {
       const csv = new ObjectsToCsv(releases);
       await csv.toDisk('./export/export-releases.csv');
       res.download(exportFolder + 'export-releases.csv')
-      return res.json(data);
+      return res.json({success: true});
     } catch (e) {
       res.status(500).json(e.message)
     }
   }
   async delete(req, res) {
     try {
-      const data = await ReleaseService.delete(req.params.id);
-      return res.json(data)
+      const response = await ReleaseService.delete(req.params.id);
+      return res.json(response)
     } catch (e) {
       res.status(500).json(e)
     }
   }
   async addToRevibedMany(req, res) {
     try {
-      const data = await ReleaseService.addToRevibedMany();
-      return res.json(data);
+      const response = await ReleaseService.addToRevibedMany();
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
   }
   async putOnSale(req, res) {
     try {
-      const data = await ReleaseService.putOnSale(req.body);
-      return res.json(data);
+      const response = await ReleaseService.putOnSale(req.body);
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
   }
   async checkRelease(req, res) {
     try {
-      const data = await ReleaseService.checkRelease(req.body.releaseID);
-      return res.json(data);
+      const response = await ReleaseService.checkRelease(req.body.releaseID);
+      return res.json(response);
     } catch (e) {
       console.log('e.message ', e.message)
       res.status(500).json(e.message)

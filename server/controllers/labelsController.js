@@ -29,8 +29,8 @@ class ReleaseController {
       const id = req.params.id
       const label = req.body.label
       const user = req.body.user
-      const data = await LabelService.update(id, label, user);
-      return res.json(data);
+      const response = await LabelService.update(id, label, user);
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
@@ -44,7 +44,7 @@ class ReleaseController {
       await csv.toDisk('./export/export-labels.csv');
       res.download(exportFolder + 'export-labels.csv')
 
-      return res.json(data);
+      return res.json();
     } catch (e) {
       res.status(500).json(e.message)
     }
@@ -52,8 +52,8 @@ class ReleaseController {
   async delete(req, res) {
 
     try {
-      const data = await LabelService.delete(req.params.id);
-      return res.json(data)
+      const response = await LabelService.delete(req.params.id);
+      return res.json(response)
     } catch (e) {
       res.status(500).json(e)
     }
@@ -61,16 +61,16 @@ class ReleaseController {
   async removeParentLabel(req, res) {
 
     try {
-      const data = await LabelService.removeParentLabel(req);
-      return res.json(data);
+      const response = await LabelService.removeParentLabel(req);
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
   }
   async sublabelsExistUpdate(req, res) {
     try {
-      const data = await LabelService.sublabelsExistUpdate();
-      return res.json(data);
+      const response = await LabelService.sublabelsExistUpdate();
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
@@ -78,8 +78,8 @@ class ReleaseController {
   async sublabelsStatusUpdate(req, res) {
     const parentLabelID = req.body.id
     try {
-      const data = await LabelService.sublabelsStatusUpdate(parentLabelID);
-      return res.json(data);
+      const response = await LabelService.sublabelsStatusUpdate(parentLabelID);
+      return res.json(response);
     } catch (e) {
       res.status(500).json(e.message)
     }
