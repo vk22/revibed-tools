@@ -63,6 +63,10 @@ class Trackservice {
         })
         const saveData = await newTrack.save()
         console.log('saveData ', saveData)
+        return {
+          success: true,
+          message: `Track created!`
+        }
       } else {
         return {
           success: false,

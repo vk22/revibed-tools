@@ -56,6 +56,18 @@ class ReleaseService {
             let data = { prop: 'statusDiscogs', value: firstLabelStatus }
             await this.releaseEditOneProp(newRelease.releaseID, data)
 
+            //// Add tracks
+
+            const tracklist = newRelease.tracklist
+            if (tracklist.length) {
+              for (let i = 0; i < tracklist.length; ++i) {
+                let track = tracklist[i]
+                track.releaseID = newRelease.releaseID
+                const createTrackResponse = await tracksService.create(track)
+                console.log('createTrackResponse ', createTrackResponse)
+              }
+            }
+
           }
           /// Get Artist Data
           if (newRelease.artists.length) {
