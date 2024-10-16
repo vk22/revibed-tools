@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { jwtToken } = require("../config/config");
-const apiKeyGood = 'l74b9ba9qmext9a6ulniigq8'
+const apiKeyGood = process.env.X_API_KEY
 const checkToken = (query) => {
   const token = query.token
   if (token) {
