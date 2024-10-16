@@ -33,11 +33,5 @@ class DistributorController {
   }
 }
 
-function checkHeaders(req) {
-  if (req.headers['x-api-key'] != 'l74b9ba9qmext9a6ulniigq8') {
-    return false
-  }
-  return true
-}
 
 module.exports = new DistributorController();

@@ -75,9 +75,7 @@ export const main = {
         },
         async getYoutubes({ rootState }) {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-youtubes`, {
-                headers: {
-                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
-                },
+
                 params: {
                     token: rootState.auth.token
                 }
@@ -86,9 +84,7 @@ export const main = {
         },
         async getLabels({ rootState }) {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-labels`, {
-                headers: {
-                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
-                },
+                
                 params: {
                     token: rootState.auth.token
                 }
@@ -97,9 +93,7 @@ export const main = {
         },
         async getArtists({ rootState }) {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-artists`, {
-                headers: {
-                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
-                },
+                
                 params: {
                     token: rootState.auth.token
                 }
@@ -108,9 +102,6 @@ export const main = {
         },
         async getReleases({ rootState }) {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-releases`, {
-                headers: {
-                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
-                },
                 params: {
                     token: rootState.auth.token
                 }
@@ -119,9 +110,7 @@ export const main = {
         },
         async getTracks({ rootState }) {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-tracks`, {
-                headers: {
-                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
-                },
+                
                 params: {
                     token: rootState.auth.token
                 }
@@ -130,9 +119,7 @@ export const main = {
         },
         async getDistributors({ rootState }) {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-distributors`, {
-                headers: {
-                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
-                },
+
                 params: {
                     token: rootState.auth.token
                 }
@@ -141,9 +128,7 @@ export const main = {
         },
         async getOwners({ rootState }) {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-owners`, {
-                headers: {
-                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
-                },
+                
                 params: {
                     token: rootState.auth.token
                 }
@@ -152,9 +137,7 @@ export const main = {
         },
         async getCountries({ rootState }) {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-countries`, {
-                headers: {
-                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
-                },
+                
                 params: {
                     token: rootState.auth.token
                 }
@@ -260,7 +243,7 @@ export const main = {
 
         },
 
-        async addLabel({ state, dispatch }, labelData) {
+        async addLabel({ rootState, state, dispatch }, labelData) {
             state.allDataReady = false
             console.log('labelData ', labelData)
             let label = {
@@ -271,8 +254,8 @@ export const main = {
             if (label) {
                 if (type === 'labels') {
                     const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/add-label/`, { label: label }, {
-                        headers: {
-                            'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                        params: {
+                            token: rootState.auth.token
                         }
                     })
                     console.log('response after edit: ', data)
@@ -307,22 +290,22 @@ export const main = {
             if (label) {
                 if (type === 'labels') {
                     const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-label/${labelID}`, { label: label, user: user }, {
-                        headers: {
-                            'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                        params: {
+                            token: rootState.auth.token
                         }
                     })
                     console.log('editLabel response : ', data)
                 } else if (type === 'distributors') {
                     const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-distributor/${labelID}`, { label: label, user: user }, {
-                        headers: {
-                            'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                        params: {
+                            token: rootState.auth.token
                         }
                     })
                     //console.log('response after edit: ', data)
                 } else if (type === 'owners') {
                     const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-owner/${labelID}`, { label: label, user: user }, {
-                        headers: {
-                            'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                        params: {
+                            token: rootState.auth.token
                         }
                     })
                     //console.log('response after edit: ', data)
@@ -350,8 +333,8 @@ export const main = {
             if (artist) {
                 if (type === 'artists') {
                     const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-artist/${artistID}`, { artist: artist, user: user }, {
-                        headers: {
-                            'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                        params: {
+                            token: rootState.auth.token
                         }
                     })
                     console.log('response after edit: ', data)
@@ -359,7 +342,7 @@ export const main = {
             }
             await dispatch('getAllData')
         },
-        async removeParentLabel({ state, dispatch }, labelData) {
+        async removeParentLabel({ rootState, state, dispatch }, labelData) {
             state.allDataReady = false
             console.log('labelData ', labelData)
             let label = {
@@ -378,22 +361,22 @@ export const main = {
             if (label) {
                 if (type === 'labels') {
                     const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/remove-parentlabel/${labelID}`, { label: label }, {
-                        headers: {
-                            'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                        params: {
+                            token: rootState.auth.token
                         }
                     })
                     console.log('response after edit: ', data)
                 } else if (type === 'distributors') {
                     const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-distributor/${labelID}`, { label: label }, {
-                        headers: {
-                            'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                        params: {
+                            token: rootState.auth.token
                         }
                     })
                     console.log('response after edit: ', data)
                 } else if (type === 'owners') {
                     const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-owner/${labelID}`, { label: label }, {
-                        headers: {
-                            'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                        params: {
+                            token: rootState.auth.token
                         }
                     })
                     console.log('response after edit: ', data)
@@ -401,7 +384,7 @@ export const main = {
             }
             await dispatch('getAllData')
         },
-        async sublabelsStatusUpdate({ state, dispatch }, labelData) {
+        async sublabelsStatusUpdate({ rootState, state, dispatch }, labelData) {
             state.allDataReady = false
             console.log('labelData ', labelData)
             let label = {
@@ -418,8 +401,8 @@ export const main = {
             if (label) {
                 if (type === 'labels') {
                     const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/sublabels-status-update/`, { id: label.id }, {
-                        headers: {
-                            'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                        params: {
+                            token: rootState.auth.token
                         }
                     })
                     console.log('response after edit: ', data)
@@ -427,33 +410,40 @@ export const main = {
             }
             await dispatch('getAllData')
         },
-        async exportLabels({ state, commit }, labels) {
+        async exportLabels({ rootState }, labels) {
             console.log('exportLabels ', labels)
-            const { data } = await axios.post('http://labels.kx-streams.com/api/export-labels/', { labels: labels}, { responseType: "arraybuffer", headers: {
-                'x-api-key': 'l74b9ba9qmext9a6ulniigq8'} 
-            } )
+            const { data } = await axios.post('http://labels.kx-streams.com/api/export-labels/', { labels: labels}, { responseType: "arraybuffer", 
+                    params: {
+                        token: rootState.auth.token
+                    }
+                } 
+            )
             console.log('exportLabels response: ', data)
             forceFileDownload(data, 'export-labels.csv')
 
         },
-        async exportReleases({ state, commit }, releases) {
+        async exportReleases({ rootState }, releases) {
             console.log('exportReleases ', releases)
-            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/export-releases/`, { releases: releases}, { responseType: "arraybuffer", headers: {
-                'x-api-key': 'l74b9ba9qmext9a6ulniigq8'} 
-            } )
+            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/export-releases/`, { releases: releases}, { responseType: "arraybuffer", 
+                    params: {
+                        token: rootState.auth.token
+                    }
+                } 
+            )
             console.log('exportReleases response: ', data)
             forceFileDownload(data, 'export-releases.csv')
         },
-        async removeFromRevibedMany({ state, commit }, releases) {
+        async removeFromRevibedMany({ rootState }, releases) {
             console.log('removeFromRevibedMany ', releases)
             const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/remove-from-rvbd-many/`, { releases: releases }, {
-                headers: {
-                    'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
-                }
-            } )
+                    params: {
+                        token: rootState.auth.token
+                    }
+                } 
+            )
             console.log('removeFromRevibedMany response: ', data)
         },
-        async editRelease({ state, dispatch, rootState }, releaseData) {
+        async editRelease({ dispatch, rootState }, releaseData) {
             console.log('releaseData ', releaseData)
             let user = rootState.auth.user
             let release = releaseData.release
@@ -461,8 +451,8 @@ export const main = {
             console.log('editRelease ', release)
             if (release) {
                 const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-release/${release._id}`, {release: release, user: user}, {
-                    headers: {
-                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                    params: {
+                        token: rootState.auth.token
                     }
                 })
                 //console.log('response after edit: ', data)
@@ -470,7 +460,7 @@ export const main = {
             }
             await dispatch('getAllData')
         },
-        async editTrack({ state, dispatch, rootState }, trackData) {
+        async editTrack({ rootState }, trackData) {
             console.log('trackData ', trackData)
             let user = rootState.auth.user
             let track = trackData.track
@@ -478,8 +468,8 @@ export const main = {
             console.log('editTrack ', track)
             if (track) {
                 const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-track/${track._id}`, {track: track, user: user}, {
-                    headers: {
-                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                    params: {
+                        token: rootState.auth.token
                     }
                 })
                 //console.log('response after edit: ', data)
@@ -487,7 +477,7 @@ export const main = {
             }
             //await dispatch('getAllData')
         },
-        async putOnSale({ state, dispatch, rootState }, releaseData) {
+        async putOnSale({ dispatch, rootState }, releaseData) {
             console.log('releaseData ', releaseData)
             let user = rootState.auth.user
             let release = releaseData.release
@@ -495,15 +485,15 @@ export const main = {
             console.log('putOnSale ', release)
             if (release) {
                 const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/put-on-sale-release/`, {release: release, user: user}, {
-                    headers: {
-                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                    params: {
+                        token: rootState.auth.token
                     }
                 })
                 console.log('response after edit: ', data)
             }
             await dispatch('getAllData')
         },
-        async deleteRelease({ state, commit }, releaseData) {
+        async deleteRelease({ rootState, commit }, releaseData) {
             console.log('releaseData ', releaseData)
             
             let release = {
@@ -512,14 +502,14 @@ export const main = {
             console.log('deleteRelease ', release)
             if (release) {
                 const { data } = await axios.delete(`${import.meta.env.VITE_API_URL}/delete-release/${release.id}`, {
-                    headers: {
-                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                    params: {
+                        token: rootState.auth.token
                     }
                 })
                 console.log('response after delete: ', data)
             }        
         },  
-        async editYoutube({ state, dispatch }, youtubeData) {
+        async editYoutube({ rootState, dispatch }, youtubeData) {
             console.log('youtubeData ', youtubeData)
             let youtube = {
                 discogsRelease: youtubeData.youtube.discogsRelease,
@@ -528,66 +518,76 @@ export const main = {
             console.log('editYoutube ', youtube)
             if (youtube) {
                 const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-youtube/${youtube.id}`, {youtube: youtube}, {
-                    headers: {
-                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                    params: {
+                        token: rootState.auth.token
                     }
                 })
                 console.log('response after edit: ', data)
             }
             await dispatch('getAllData')
         },  
-        async editDistributor({ state, dispatch }, labelData) {
+        async editDistributor({ rootState, dispatch }, labelData) {
             let contacts = labelData.label.contacts
             let status = labelData.status
             let labelID = labelData.label._id
             
             if (labelData) {
                 const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-distributor/${labelID}`, { contacts: contacts, status: status}, {
-                    headers: {
-                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                    params: {
+                        token: rootState.auth.token
                     }
                 })
                 console.log('response after edit: ', data)
             }
             await dispatch('getAllData')
         },
-        async editOwner({ state, dispatch }, labelData) {
+        async editOwner({ rootState, dispatch }, labelData) {
             let contacts = labelData.label.contacts
             let status = labelData.status
             let labelID = labelData.label._id
             
             if (labelData) {
                 const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/edit-owner/${labelID}`, { contacts: contacts, status: status}, {
-                    headers: {
-                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'
+                    params: {
+                        token: rootState.auth.token
                     }
                 })
                 console.log('response after edit: ', data)
             }
             await dispatch('getAllData')
         },
-        async checkRelease({ state, commit }, releaseID) {
+        async checkRelease({ rootState, commit }, releaseID) {
             console.log('checkRelease ', releaseID)
             try {
                 const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/check-release/`, { releaseID: releaseID}, { 
-                    headers: {
-                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'} 
-                    } )
+                        params: {
+                            token: rootState.auth.token
+                        }
+                    } 
+                )
                 console.log('checkRelease response: ', data)
-                return data
+                return {
+                    success: true,
+                    data: data
+                }
             } catch (error) {
                 console.log('error ', error)
-                return error.response.data
+                return {
+                    success: false,
+                    message: error.response.data
+                }
             }   
 
         },
-        async addRelease({ state, commit }, releaseData) {
+        async addRelease({ rootState, commit }, releaseData) {
             console.log('addRelease ', releaseData)
             try {
                 const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/add-release/`, releaseData, { 
-                    headers: {
-                        'x-api-key': 'l74b9ba9qmext9a6ulniigq8'} 
-                    } )
+                        params: {
+                            token: rootState.auth.token
+                        }
+                    } 
+                )
                 console.log('checkRelease response: ', data)
                 return data
             } catch (error) {

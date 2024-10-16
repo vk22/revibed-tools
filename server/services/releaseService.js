@@ -445,7 +445,7 @@ class ReleaseService {
       // const releasesExtended = await this.releasesHandle(releases)
       // const notGoods = await Releases.find({type: {$ne: 'goods'}}).sort({ _id: -1 });
 
-      const releases = await Releases.find({"type": { "$in": ["goods", "coming_soon"]}}).sort({ _id: 1 });
+      const releases = await Releases.find({"type": { "$in": ["goods", "coming_soon"]}}).sort({ _id: -1 });
       if (!releases) {
         return { message: `Ничего не найдено` }
       }

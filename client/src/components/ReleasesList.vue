@@ -115,6 +115,9 @@
                   </div>
                 </v-col>
               </v-row>
+              <v-row v-else>
+                <v-col><div v-if="newReleaseError">{{ newReleaseError.message }}</div></v-col>
+              </v-row>
           </v-container>
         <v-card-actions class="pr-4">
               <v-spacer></v-spacer>
@@ -398,6 +401,7 @@ export default {
       discogsLink: undefined,
       discogsLinkReleaseID: null,
       newReleaseResult: undefined,
+      newReleaseError: false,
       addReleasePanelIsOpen: false,
       addReleaseData: {
         releaseID: undefined,
@@ -530,7 +534,14 @@ export default {
     async checkRelease() {
       this.discogsLinkReleaseID = this.parseDiscogsLink()
       if (!this.discogsLinkReleaseID) return
-      this.newReleaseResult = await this.$store.dispatch("checkRelease", this.discogsLinkReleaseID);
+      const response = await this.$store.dispatch("checkRelease", this.discogsLinkReleaseID);
+      console.log('checkRelease response ', response)
+      if (response.success) {
+        this.newReleaseResult = response.data
+      } else {
+        this.newReleaseError = response.message
+      }
+      
     },
     parseDiscogsLink(link) {
       const arr = this.discogsLink.split('/')
