@@ -132,6 +132,22 @@ class RevibedService {
     }
   }
 
+  async addTracksAuthors(tracks) {
+    try {
+      const response = await axios.put(`https://system-api.revibed.com/release-tracks`, tracks, { 
+        headers: { "Authorization": `Bearer ${tokenRvbd}` } 
+      });
+      if (!response.data.success) {
+        LogsService.logger.error(response.data.error)
+        return { success: false, message: response.data.error };
+      } else {
+        return { success: true, message: 'All good' };
+      }
+    } catch (e) {
+      console.log('err ', e.message)
+    }
+  }
+
   async bindWithRevibedGoods() {
     console.log('bindWithRevibedGoods')
 

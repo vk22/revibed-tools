@@ -1,6 +1,6 @@
 const Tracks = require("../models/tracks-model");
 const Releases = require("../models/releases-model");
-// const releaseService = require("./releaseService");
+const revibedService = require("./revibedService");
 // const discogsService = require("./discogsService");
 
 class Trackservice {
@@ -85,7 +85,7 @@ class Trackservice {
     console.log('edit Track track ', track)
     try {
       const trackDB = await Tracks.findById(id);
-
+      
       if (!trackDB) {
         return { success: false, message: `Ничего не найдено` }
       } else {
@@ -103,6 +103,10 @@ class Trackservice {
         }
 
         const saveItem = await trackDB.save()
+
+        ///
+        const sendToRevibedRes = await this.sendToRevibed(track)
+        console.log('sendToRevibedRes ', sendToRevibedRes)
 
         if (!saveItem) {
           console.log(err)
@@ -163,6 +167,23 @@ class Trackservice {
         message: `Smth wrong`
       }
 
+    }
+  }
+
+  async sendToRevibed(track) {
+    console.log('sendToRevibed')
+    if (track.composers.length || track.authors.length) {
+      const trackData = {
+        "discogsReleaseId": track.releaseID,
+        "position": track.position,
+        "composers": track.composers,
+        "authors": track.authors
+      }
+      const pushToRV = await revibedService.addTracksAuthors([trackData])
+      console.log('pushToRV ', pushToRV)
+      return pushToRV
+    } else {
+      return { message: 'No data to send' }
     }
   }
 }
