@@ -31,7 +31,7 @@ export const main = {
         releasesAdded: [],
         releasesAllStatuses: ['default', 'warning', 'blocked', 'success'],
         releasesAllTypes: ['goods', 'preorder', 'coming_soon', 'allowed_to_buy'],
-        releasesAllSources: ['Anton', 'Revibed', 'No'],
+        releasesAllSources: ['Anton', 'Revibed', 'KX', 'No'],
         labelsAllStatuses: {
             contact: ['not_contacted', 'contacted', 'refused', 'approved', 'open_to_talk', 'in_negotiation', 'no_contact_available', 'more_info_needed', 'email_bounced', 'reconnect_later'],
             main: ['default', 'warning', 'blocked', 'success'],
