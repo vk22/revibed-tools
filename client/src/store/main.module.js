@@ -916,6 +916,8 @@ export const main = {
             if (filters.length) {
                 if (filters.indexOf('goodReleases') > -1) {
                     return state.releases.filter(item => item.statusMain === 'allowed')
+                } else if (filters.indexOf('blockedReleases') > -1) {
+                    return state.releases.filter(item => item.statusMain === 'blocked')
                 } else if (filters.indexOf('goodButNotFoSale') > -1) {
                     return state.releases.filter(item => item.statusMain === 'allowed' && !item.onRevibed.forSale)
                 } else if ( filters.indexOf('addToRVBD') > -1) {

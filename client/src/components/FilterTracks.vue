@@ -24,18 +24,9 @@
                     @input="changeFilterSource($event)"
                     />
                 </div>
-                <!-- <v-select
-                    label="Select"
-                    :items="allSources"
-                    variant="outlined"
-                    density="compact"
-                    @input="changeFilterSource($event)"
-                    ></v-select> -->
             </v-list-item>
         </v-list>
-
         <v-divider></v-divider>
-
         <v-list>
           <v-list-item>
             <v-checkbox
@@ -88,7 +79,16 @@
               class="filter-checkbox"
               @change="changeFilterGetGood"
               v-model="filterGetGood"
-              label="Good Releases"
+              label="Allowed For Sale"
+            >
+            </v-checkbox>
+          </v-list-item>
+          <v-list-item>
+            <v-checkbox
+              class="filter-checkbox"
+              @change="changeFilterGetBlocked"
+              v-model="filterGetBlocked"
+              label="Blocked For Sale"
             >
             </v-checkbox>
           </v-list-item>
@@ -236,6 +236,14 @@ export default {
         this.$store.commit('setFilteredState2', {action: 'remove', value: 'goodReleases'})
       }
     },
+    changeFilterGetBlocked(event) {
+    if (event.target.checked) {
+        // this.$store.commit('resetReleasesFilter1')
+        this.$store.commit('setFilteredState2', {action: 'add', value: 'blockedReleases'})
+      } else {
+        this.$store.commit('setFilteredState2', {action: 'remove', value: 'blockedReleases'})
+      }
+    },
     changeFilterGetGoodNotForSale(event) {
     if (event.target.checked) {
         // this.$store.commit('resetReleasesFilter1')
@@ -343,6 +351,15 @@ export default {
         set (value) {
             this.$store.commit('resetReleasesFilter1')
             this.$store.commit('setReleasesFilter', {item: 'goodReleases', value: value})
+        }
+    },
+    filterGetBlocked: {
+        get () {
+            return this.$store.getters.getReleasesFilter.blockedReleases
+        },
+        set (value) {
+            this.$store.commit('resetReleasesFilter1')
+            this.$store.commit('setReleasesFilter', {item: 'blockedReleases', value: value})
         }
     },
     filterGetGoodNotForSale: {
