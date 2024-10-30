@@ -542,7 +542,11 @@ export default {
       this.release.composers = this.release.composers.filter(element => {
         return element !== ''
       });
-      await this.$store.dispatch('editRelease', { release: this.release })
+      const savedData = await this.$store.dispatch('editRelease', { release: this.release })
+      console.log('savedData ', savedData)
+      if (savedData.success) {
+        this.release = savedData.release
+      }
       setTimeout(() => {
         this.notLoading = true
       }, 1000);

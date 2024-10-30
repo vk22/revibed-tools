@@ -443,7 +443,7 @@ export const main = {
             )
             console.log('removeFromRevibedMany response: ', data)
         },
-        async editRelease({ dispatch, rootState }, releaseData) {
+        async editRelease({ dispatch, rootState, commit }, releaseData) {
             console.log('releaseData ', releaseData)
             let user = rootState.auth.user
             let release = releaseData.release
@@ -456,6 +456,7 @@ export const main = {
                     }
                 })
                 //console.log('response after edit: ', data)
+                commit('setChangedReleaseToStore', data.release)
                 return data
             }
             await dispatch('getAllData')
@@ -721,6 +722,29 @@ export const main = {
             state.onRevibedCount = data.onRevibedCount
             state.onYoutubeCount = data.onYoutubeCount
             state.notGoods = data.notGoods
+        },
+        setChangedReleaseToStore(state, release) {
+            state.allReleasesAndNotGoods = state.allReleasesAndNotGoods.map(item => {
+                if (item._id === release._id) {
+                    return release
+                } else {
+                    return item
+                }
+            })
+            state.allReleases = state.allReleases.map(item => {
+                if (item._id === release._id) {
+                    return release
+                } else {
+                    return item
+                }
+            })
+            state.releases = state.releases.map(item => {
+                if (item._id === release._id) {
+                    return release
+                } else {
+                    return item
+                }
+            })
         },
         setArtists(state, data) {
             data.artists.sort((a, b) => {

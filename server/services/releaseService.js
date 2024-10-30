@@ -601,6 +601,7 @@ class ReleaseService {
   async update(id, release, user) {
     console.log('editRelease ', id)
     let releaseNew = release;
+    console.log('releaseNew ', releaseNew)
     let firstLabelData;
     let labelChanged = false;
     //console.log('releaseNew ', releaseNew)
@@ -693,6 +694,7 @@ class ReleaseService {
         }
 
         let saveItem = await releaseFromDB.save()
+        console.log('saveItem ', saveItem)
 
         /// After save
 
@@ -746,6 +748,7 @@ class ReleaseService {
           return {
             success: true,
             message: `Release with ID_${saveItem._id} saved!`,
+            release: saveItem
           }
         }
       }
