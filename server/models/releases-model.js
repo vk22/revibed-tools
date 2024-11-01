@@ -4,6 +4,9 @@ const NewSchema = new Schema({
   releaseID: {
     type: Number
   },
+  masterID: {
+    type: Number
+  },
   type: {
     type: String,
     default: 'goods'
@@ -122,6 +125,18 @@ const NewSchema = new Schema({
   },
   lastUpdate: {
     type: Object
+  },
+  communityDiscogs: {
+    type: Object
+  },
+  haveWantRatio: {
+    type: Number
+  },
+  priceSuggestionsDiscogs: {
+    type: Object
+  },
+  priceSuggestionsDiscogsMax: {
+    type: Number
   }
 
 })

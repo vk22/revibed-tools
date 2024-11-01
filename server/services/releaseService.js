@@ -92,7 +92,7 @@ class ReleaseService {
         } else {
           return { success: false, msg: 'This release already exist' };
         }
-        
+
       }
 
     } catch (error) {
@@ -102,12 +102,50 @@ class ReleaseService {
     }
   }
 
+  async getDiscogsStatisticsData(releaseID) {
+    /// we want to get
+    let communityDiscogs, haveWantRatio, priceSuggestionsDiscogs, priceSuggestionsDiscogsMax
+    
+    const releaseData = await discogsService.getReleaseData(releaseID)
+    if (releaseData) {
+      communityDiscogs = releaseData.community ? releaseData.community : {}      
+      if (releaseData.community.want) {
+        const ratio = releaseData.community.have / releaseData.community.want
+        haveWantRatio = ratio.toFixed(2)
+      } else {
+        haveWantRatio = 0
+      }
+    }
+    const getPriceSuggestionsData = await discogsService.getPriceSuggestions(releaseID);
+    if (getPriceSuggestionsData) {
+      priceSuggestionsDiscogs = getPriceSuggestionsData ? getPriceSuggestionsData : {}
+      priceSuggestionsDiscogsMax = getPriceSuggestionsData ? Math.round(Object.entries(getPriceSuggestionsData)[0][1].value) : 0;
+    }
+
+    return {
+      communityDiscogs: communityDiscogs,
+      haveWantRatio: haveWantRatio,
+      priceSuggestionsDiscogs: priceSuggestionsDiscogs,
+      priceSuggestionsDiscogsMax: priceSuggestionsDiscogsMax
+    }
+
+  }
+
   //// Получить дополнительные данные по релизу
   async getAdditionalDataOfRelease(release) {
     const releaseData = await discogsService.getReleaseData(release.releaseID)
-    console.log('release.source ', release.source)
+    const getPriceSuggestionsData = await discogsService.getPriceSuggestions(release.releaseID);
+    const priceSuggestionsDiscogsMax = getPriceSuggestionsData ? Math.round(Object.entries(getPriceSuggestionsData)[0][1].value) : 0;
+    let haveWantRatio
+    if (releaseData.community.want) {
+      const ratio = releaseData.community.have / releaseData.community.want
+      haveWantRatio = ratio.toFixed(2)
+    } else {
+      haveWantRatio = 0
+    }
     return {
       releaseID: release.releaseID,
+      masterID: release.master_id,
       type: release.type ? release.type : 'goods',
       source: release.source ? release.source : '',
       sourceCondition: release.sourceCondition ? release.sourceCondition : '',
@@ -133,8 +171,12 @@ class ReleaseService {
       country: releaseData.country ? releaseData.country : '',
       genres: releaseData.genres ? releaseData.genres : [],
       styles: releaseData.styles ? releaseData.styles : [],
-      tracklist: releaseData.tracklist ? releaseData.tracklist : []
-      
+      tracklist: releaseData.tracklist ? releaseData.tracklist : [],
+      communityDiscogs: releaseData.community ? releaseData.community : {},
+      haveWantRatio: haveWantRatio,
+      priceSuggestionsDiscogs: getPriceSuggestionsData ? getPriceSuggestionsData : {},
+      priceSuggestionsDiscogsMax: priceSuggestionsDiscogsMax
+
     }
   }
 
@@ -438,19 +480,14 @@ class ReleaseService {
     // await revibedService.bindWithRevibedGoods()
 
     try {
-      // const releases = await Releases.find({type: 'goods'}).sort({ _id: -1 });
-      // if (!releases) {
-      //   return { message: `Ничего не найдено` }
-      // }
-      // const releasesExtended = await this.releasesHandle(releases)
-      // const notGoods = await Releases.find({type: {$ne: 'goods'}}).sort({ _id: -1 });
-
-      const releases = await Releases.find({"type": { "$in": ["goods", "coming_soon"]}}).sort({ _id: -1 });
+      const releases = await Releases.find({ "type": { "$in": ["goods", "coming_soon"] } }).sort({ _id: -1 });
       if (!releases) {
         return { message: `Ничего не найдено` }
       }
       const releasesExtended = await this.releasesHandle(releases)
-      const notGoods = await Releases.find({"type": { "$in": ["preorder", "allowed_to_buy"]}}).sort({ _id: -1 });
+      const notGoods = await Releases.find({ "type": { "$in": ["preorder", "allowed_to_buy"] } }).sort({ _id: -1 });
+
+      //await this.updateReleasesData(releases)
 
       return {
         success: true,
@@ -523,7 +560,7 @@ class ReleaseService {
       }
 
       // const getTracks = await tracksService.get(release.releaseID)
-  
+
       // if (!getTracks.tracks.length) {
 
       //   const releaseData = await discogsService.getReleaseData(release.releaseID)
@@ -535,7 +572,7 @@ class ReleaseService {
       //       track.releaseID = release.releaseID
       //       const createRes = await tracksService.create(track)
       //       console.log('createRes ', createRes)
-  
+
       //     }
       //   }
       //   await sleep(1000);
@@ -570,12 +607,12 @@ class ReleaseService {
     return finalData
   }
 
-  async editReleasesMany (releases) {
+  async editReleasesMany(releases) {
     for (let releaseNew of releases) {
       const releaseFromDB = await Releases.findById(releaseNew._id);
       if (!releaseFromDB) {
         return res.status(400).json({ message: `Ничего не найдено` })
-      } else {  
+      } else {
         releaseFromDB.statusMain = await this.releaseSaleStatusHandler(releaseFromDB)
         let saveItem = await releaseFromDB.save()
         console.log('saveItem ', saveItem)
@@ -587,13 +624,13 @@ class ReleaseService {
   async updateByRevibedID(releases) {
     for (let releaseNew of releases) {
       const id = releaseNew.id
-      const releaseFromDB = await Releases.findOne({"onRevibed.id": id});
+      const releaseFromDB = await Releases.findOne({ "onRevibed.id": id });
       if (releaseFromDB) {
         console.log('releaseFromDB ', releaseFromDB)
         releaseFromDB.authors = releaseNew.authors
         releaseFromDB.composers = releaseNew.composers
         await releaseFromDB.save()
-      } 
+      }
     }
   }
 
@@ -606,7 +643,7 @@ class ReleaseService {
     let labelChanged = false;
     //console.log('releaseNew ', releaseNew)
     try {
-      const releaseFromDB = await Releases.findById(id);
+      let releaseFromDB = await Releases.findById(id);
       // console.log('labelOne ', labelOne)
 
       if (!releaseFromDB) {
@@ -693,6 +730,16 @@ class ReleaseService {
           date: Date.parse(new Date())
         }
 
+        /// update Discogs Statistics
+
+        const discogsStatisticsData = await this.getDiscogsStatisticsData(releaseFromDB.releaseID)
+        console.log('discogsStatisticsData ', discogsStatisticsData)
+        releaseFromDB = Object.assign(releaseFromDB, discogsStatisticsData);
+        // releaseFromDB.communityDiscogs = discogsStatisticsData.communityDiscogs,
+        // releaseFromDB.haveWantRatio = discogsStatisticsData.haveWantRatio,
+        // releaseFromDB.priceSuggestionsDiscogs = discogsStatisticsData.priceSuggestionsDiscogs,
+        // releaseFromDB.priceSuggestionsDiscogsMax = discogsStatisticsData.LabelspriceSuggestionsDiscogsMax
+
         let saveItem = await releaseFromDB.save()
         console.log('saveItem ', saveItem)
 
@@ -726,7 +773,7 @@ class ReleaseService {
           const rvChecker = await revibedService.checker(releaseFromDB)
           console.log('rvChecker ', rvChecker)
         }
-        
+
         if (!saveItem) {
           console.log(err)
           return {
@@ -807,12 +854,12 @@ class ReleaseService {
           let statusMainOld = releaseFromDB.statusMain
           releaseFromDB.statusMain = await this.releaseSaleStatusHandler(releaseFromDB)
           await releaseFromDB.save()
-  
+
           /// if main status has been changed
           if (statusMainOld !== releaseFromDB.statusMain) {
             releasesUpdated.push(releaseFromDB)
           }
-        }    
+        }
       }
 
       console.log('releasesUpdated ', releasesUpdated)
@@ -896,7 +943,7 @@ class ReleaseService {
   }
 
   /// Export CSV
-  async export (data) {
+  async export(data) {
     const ids = data.releases;
     console.log('ids ', ids)
     let releases = await Releases.find().where('_id').in(ids).sort({ _id: -1 })
@@ -914,7 +961,7 @@ class ReleaseService {
     return releases
   }
 
-  async checkRelease (releaseID) {
+  async checkRelease(releaseID) {
     console.log('checkRelease ', releaseID)
     const releaseFromDB = await Releases.findOne({ releaseID: releaseID });
     console.log('releaseFromDB ', releaseFromDB)
@@ -924,12 +971,12 @@ class ReleaseService {
         data: {
           status: releaseFromDB.statusMain
         }
-        
+
       }
     } else {
       const releaseDiscogsData = await discogsService.getReleaseData(releaseID)
       if (releaseDiscogsData) {
-        console.log('releaseDiscogsData ', releaseDiscogsData.labels)
+        console.log('releaseDiscogsData ', releaseDiscogsData)
         const labelID = releaseDiscogsData.labels[0].id
         await this.getAndSaveNewLabelsFromDiscogs(labelID)
 
@@ -946,19 +993,61 @@ class ReleaseService {
 
         console.log('firstLabelData ', firstLabelData)
         console.log('lastParentLabelData ', lastParentLabelData)
-        
+
         return {
           result: 'release not exist',
           data: {
-            firstLabel: firstLabelName, 
-            firstLabelStatus: firstLabelStatus, 
+            firstLabel: firstLabelName,
+            firstLabelStatus: firstLabelStatus,
             lastParentLabel: lastParentLabelName,
-            lastParentStatus: lastParentStatus 
+            lastParentStatus: lastParentStatus
           }
-          }
+        }
       }
-      
+
     }
+  }
+
+  async updateReleasesData(releases) {
+    // const releases = await Releases.find({}).sort({ _id: -1 });
+    const count = releases.length
+    let done = 0
+    for (let release of releases) {
+      if (release.communityDiscogs) {
+
+        //const releaseDiscogsData = await discogsService.getReleaseData(release.releaseID)
+        //const masterID = releaseDiscogsData.master_id
+
+        const releaseFromDB = await Releases.findById(release._id);
+        // releaseFromDB.masterID = masterID
+        //releaseFromDB.communityDiscogs = releaseDiscogsData.community
+        // const getPriceSuggestionsData = await discogsService.getPriceSuggestions(release.releaseID);
+        // const priceSuggestionsDiscogs = getPriceSuggestionsData ? getPriceSuggestionsData : {};
+        // releaseFromDB.priceSuggestionsDiscogs = priceSuggestionsDiscogs
+        //releaseFromDB.priceSuggestionsDiscogsMax = Math.round(Object.entries(release.priceSuggestionsDiscogs)[0][1].value)
+        if (release.communityDiscogs.want) {
+          const ratio = release.communityDiscogs.have / release.communityDiscogs.want
+          releaseFromDB.haveWantRatio = ratio.toFixed(2)
+          //console.log('releaseFromDB ', releaseFromDB)
+          await releaseFromDB.save()
+        } else {
+          releaseFromDB.haveWantRatio = 0
+          await releaseFromDB.save()
+        }
+
+
+        done++
+        console.log('saved ', done)
+        // await sleep(2000);
+
+
+      } else {
+        console.log('exist ', release.releaseID)
+      }
+
+    }
+
+    console.log('updateReleasesData DONE! ')
   }
 
 }

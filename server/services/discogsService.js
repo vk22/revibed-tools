@@ -4,6 +4,9 @@ const db = new Discogs({
   consumerKey: "EZWmCxdwZuUQCTmUbfRY",
   consumerSecret: "tyoPkXCrZTCqIlFDaVIWeZkwTeMaCbSm",
 }).database();
+const marketplace = new Discogs({
+  userToken: "CpRhrNduiKVISZglhdkqiJizFwRjXPSgyioxHtBd"
+}).marketplace();
 
 class DiscogsService {
   constructor() {
@@ -47,7 +50,7 @@ class DiscogsService {
     console.log("getReleaseData", releaseID);
     try {
       const data = await db.getRelease(releaseID);
-      console.log("data", data);
+      //console.log("data", data);
       return data;
     } catch (err) {
       console.log("error getReleaseData", err, releaseID);
@@ -96,6 +99,18 @@ class DiscogsService {
       return undefined
     }
 
+  }
+
+  async getPriceSuggestions(releaseID) {
+    //console.log("getPriceSuggestions", releaseID);
+    try {
+      const data = await marketplace.getPriceSuggestions(releaseID);
+      //console.log("data", data);
+      return data;
+    } catch (err) {
+      console.log("error getPriceSuggestions", err, releaseID);
+      return false
+    }
   }
 
 }

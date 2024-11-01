@@ -244,6 +244,12 @@
                 >
               </template>
 
+              <template v-slot:item.haveWantRatio="{ item }">
+                {{ item.haveWantRatio }}
+              </template>
+
+              
+
               <template v-slot:item.labelName="{ item }">
                 <router-link
                   :to="`/labels/${item.labelID}`"
@@ -424,8 +430,9 @@ export default {
       headers: [
         { key: "title", title: "Title" },
         { key: "artist", title: "Artist" },
-        
         { key: "releaseID", title: "Discogs Release" },
+        { key: "haveWantRatio", title: "Ratio" },
+        { key: "priceSuggestionsDiscogsMax", title: "Suggested price" },
         { key: "source", title: "Source" },
         { key: "youtubeVideoID", title: "Youtube Link" },
         {

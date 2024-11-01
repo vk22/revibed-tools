@@ -258,12 +258,52 @@
             </div>
           </v-col>
           <v-col cols="12">
-            <div class="release-page__section tracklist">
-            <div class="mb-3">
-              <h3>Tracklist</h3>
+            <div class="release-page__section">
+              <v-row>
+                <v-col>
+                  <h3>Discogs Stats</h3>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+
+                  <div class="release-page__details" v-if="release.quality">
+                    <div>Have:</div>
+                    <div>
+                      {{ release.communityDiscogs.have }}
+                    </div>
+                  </div>
+                  <div class="release-page__details" v-if="release.quality">
+                    <div>Want:</div>
+                    <div>
+                      {{ release.communityDiscogs.want }}
+                    </div>
+                  </div>
+                  <div class="release-page__details" v-if="release.quality">
+                    <div>Ratio:</div>
+                    <div>
+                      {{ release.haveWantRatio }}
+                    </div>
+                  </div>
+                  <div class="release-page__details" v-if="release.quality">
+                    <div>Suggested price (M):</div>
+                    <div>
+                      €{{ release.priceSuggestionsDiscogsMax }}
+                    </div>
+                  </div>
+                </v-col>
+
+              </v-row>
+
             </div>
-            <div v-if="tracks">
-              <div class="track-item">
+          </v-col>
+          <v-col cols="12">
+            <div class="release-page__section tracklist">
+              <div class="mb-3">
+                <h3>Tracklist</h3>
+              </div>
+              <div v-if="tracks">
+                <div class="track-item">
                   <div class="position mr-3">
                     <b></b>
                   </div>
@@ -278,8 +318,8 @@
                   </div>
                   <div class="open-panel">
                   </div>
-              </div>
-              <div class="track-item" v-for="(track, _id) in tracks" :key="_id">
+                </div>
+                <div class="track-item" v-for="(track, _id) in tracks" :key="_id">
                   <div class="position mr-3">
                     {{ track.position }}
                   </div>
@@ -287,7 +327,7 @@
                     {{ track.title }}
                   </div>
                   <div class="authors mr-3">
-                   <div v-if="track.authors.length">{{ track.authors.join(', ') }}</div> 
+                    <div v-if="track.authors.length">{{ track.authors.join(', ') }}</div>
                   </div>
                   <div class="composers mr-3">
                     <div v-if="track.composers.length">{{ track.composers.join(', ') }}</div>
@@ -299,12 +339,12 @@
                       +
                     </div>
                   </div>
+                </div>
+              </div>
+              <div v-else>
+                <v-progress-circular :size="20" :width="2" indeterminate color="#111"></v-progress-circular>
               </div>
             </div>
-            <div v-else>
-              <v-progress-circular :size="20" :width="2" indeterminate color="#111"></v-progress-circular>
-            </div>
-          </div>
           </v-col>
           <v-col cols="12">
             <div class="release-page__section">
@@ -460,9 +500,9 @@ export default {
       if (response.success) {
         this.panelTrackIsOpen = false;
         //this.selectedTrack = undefined;
-        
+
       } else {
-        alert ('Something wrong')
+        alert('Something wrong')
       }
     },
     addCopyrightOwner() {
@@ -709,6 +749,7 @@ export default {
   .tracklist {
     border-bottom: 0;
     padding-bottom: 1rem;
+
     .track-item {
       display: flex;
       // justify-content: space-between;
@@ -723,15 +764,19 @@ export default {
       .position {
         flex-basis: 50px;
       }
+
       .title {
         flex-basis: 300px;
       }
+
       .authors {
         flex-basis: 200px;
       }
+
       .composers {
         flex-basis: 200px;
       }
+
       .open-panel {
         flex-basis: 24px;
       }
