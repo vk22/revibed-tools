@@ -134,8 +134,14 @@ class ReleaseService {
   //// Получить дополнительные данные по релизу
   async getAdditionalDataOfRelease(release) {
     const releaseData = await discogsService.getReleaseData(release.releaseID)
+    console.log('releaseData ', releaseData)
     const getPriceSuggestionsData = await discogsService.getPriceSuggestions(release.releaseID);
-    const priceSuggestionsDiscogsMax = getPriceSuggestionsData ? Math.round(Object.entries(getPriceSuggestionsData)[0][1].value) : 0;
+    console.log('getPriceSuggestionsData ', getPriceSuggestionsData)
+    let priceSuggestionsDiscogsMax = 0;
+    if (Object.keys(getPriceSuggestionsData).length) {
+      priceSuggestionsDiscogsMax = getPriceSuggestionsData ? Math.round(Object.entries(getPriceSuggestionsData)[0][1].value) : 0;
+    } 
+    
     let haveWantRatio
     if (releaseData.community.want) {
       const ratio = releaseData.community.have / releaseData.community.want

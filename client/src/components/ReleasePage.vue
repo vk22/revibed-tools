@@ -267,25 +267,25 @@
               <v-row>
                 <v-col>
 
-                  <div class="release-page__details" v-if="release.quality">
+                  <div class="release-page__details" v-if="release.communityDiscogs">
                     <div>Have:</div>
                     <div>
                       {{ release.communityDiscogs.have }}
                     </div>
                   </div>
-                  <div class="release-page__details" v-if="release.quality">
+                  <div class="release-page__details" v-if="release.communityDiscogs">
                     <div>Want:</div>
                     <div>
                       {{ release.communityDiscogs.want }}
                     </div>
                   </div>
-                  <div class="release-page__details" v-if="release.quality">
+                  <div class="release-page__details" v-if="release.haveWantRatio">
                     <div>Ratio:</div>
                     <div>
                       {{ release.haveWantRatio }}
                     </div>
                   </div>
-                  <div class="release-page__details" v-if="release.quality">
+                  <div class="release-page__details" v-if="release.priceSuggestionsDiscogsMax">
                     <div>Suggested price (M):</div>
                     <div>
                       €{{ release.priceSuggestionsDiscogsMax }}
