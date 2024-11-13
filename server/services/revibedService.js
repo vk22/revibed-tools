@@ -29,8 +29,8 @@ class RevibedService {
         return await this.getGoods(nextPage)
       } else {
         /// filter only goods: purchaseAvailable = true
-        const goods = this.goodsAllBuffer.filter(item => item.purchaseAvailable)
-        return goods
+        //const goods = this.goodsAllBuffer.filter(item => item.purchaseAvailable)
+        return this.goodsAllBuffer
       }
     } catch (err) {
       console.log("error getGoods", err);
@@ -167,9 +167,10 @@ class RevibedService {
 
     try {
       for (let good of goods) {
-        let releaseID = good.release.discogsId
-        let goodsID = good.id
-        let published = good.published
+        const releaseID = good.release.discogsId
+        const goodsID = good.id
+        const published = good.published
+        const purchaseAvailable = good.purchaseAvailable
         const releaseOne = await Releases.findOne({ releaseID: releaseID });
 
         // if (releaseID === 3597518) {
@@ -180,7 +181,16 @@ class RevibedService {
         if (!releaseOne) {
           errors.push(good)
         } else {
-          releaseOne.onRevibed = { forSale: published, id: goodsID }
+
+          if (purchaseAvailable) {
+            releaseOne.type = 'goods';
+            releaseOne.onRevibed = { forSale: published, id: goodsID };
+          } else {
+            releaseOne.type = 'coming_soon';
+            releaseOne.onRevibed = { forSale: false, id: undefined };
+          }
+          
+
           let saveItem = await releaseOne.save()
           // success.push(good)
           if (published) {
