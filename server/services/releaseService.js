@@ -141,7 +141,6 @@ class ReleaseService {
     if (Object.keys(getPriceSuggestionsData).length) {
       priceSuggestionsDiscogsMax = getPriceSuggestionsData ? Math.round(Object.entries(getPriceSuggestionsData)[0][1].value) : 0;
     } 
-    
     let haveWantRatio
     if (releaseData.community.want) {
       const ratio = releaseData.community.have / releaseData.community.want
@@ -149,6 +148,7 @@ class ReleaseService {
     } else {
       haveWantRatio = 0
     }
+    /// check if Revibed
     return {
       releaseID: release.releaseID,
       masterID: release.master_id,

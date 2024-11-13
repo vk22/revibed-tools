@@ -29,8 +29,8 @@ class RevibedService {
         return await this.getGoods(nextPage)
       } else {
         /// filter only goods: purchaseAvailable = true
-        //let goods = this.goodsAllBuffer.filter(item => item.purchaseAvailable)
-        return this.goodsAllBuffer
+        const goods = this.goodsAllBuffer.filter(item => item.purchaseAvailable)
+        return goods
       }
     } catch (err) {
       console.log("error getGoods", err);
