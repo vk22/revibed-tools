@@ -182,14 +182,23 @@ class RevibedService {
           errors.push(good)
         } else {
 
-          if (purchaseAvailable) {
+          //// 
+          if (releaseOne.source === 'Revibed') {
+
+            if (purchaseAvailable) {
+              releaseOne.type = 'goods';
+              releaseOne.onRevibed = { forSale: published, id: goodsID };
+            } else {
+              releaseOne.type = 'coming_soon';
+              releaseOne.onRevibed = { forSale: false, id: undefined };
+            }
+
+          } else {
             releaseOne.type = 'goods';
             releaseOne.onRevibed = { forSale: published, id: goodsID };
-          } else {
-            releaseOne.type = 'coming_soon';
-            releaseOne.onRevibed = { forSale: false, id: undefined };
+
           }
-          
+
 
           let saveItem = await releaseOne.save()
           // success.push(good)
