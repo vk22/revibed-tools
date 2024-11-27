@@ -190,7 +190,7 @@ class RevibedService {
               releaseOne.onRevibed = { forSale: published, id: goodsID };
             } else {
               releaseOne.type = 'coming_soon';
-              releaseOne.onRevibed = { forSale: false, id: undefined };
+              releaseOne.onRevibed = { forSale: published, id: goodsID };
             }
 
           } else {
